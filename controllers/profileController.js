@@ -1,6 +1,8 @@
 const profile = require('../models/profile');
+const User = require('../models/user');
 const { response } = require('../helpers/response');
 const searchHandler = require('./searchController');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     'getProfile': async (req, res, next) =>  {
@@ -44,7 +46,37 @@ module.exports = {
             console.log('Rows updated' + count)
         });
 
-        response(res, null, "Done man!",null, 202);
+        response(res, null, "Money added successfully!",null, 202);
+    },
+
+    'updatePassword': async (req, res, next) => {
+        let currentPassword = req.body.currentPassword; //currentPassword from the request body
+        let newPassword = req.body.newPassword; //newPassword from the request body
+
+        let userId = req.userId; //decoded UserId
+
+        //retrieves the UserProfile that matches with UserId
+        let userProfile = await User.findOne({
+            where:{
+                userId:userId
+            },
+        });
+
+        //confirms old password and updates with the new password
+        if(bcrypt.compareSync(currentPassword, userProfile.get('password')))
+        {
+            let hashedPassword = bcrypt.hashSync(newPassword, 8);
+            User.update({ 'password' : hashedPassword}, { where : { userId: userId}}).then(count => {
+                console.log('Rows updated' + count)
+            });
+
+            response(res, null, 'Password updated successfully!', null, 202);
+
+        }
+        else
+        {
+            response(res, null, 'Password do not match', null, 401);
+        }
     },
 
     'updateProfile': async (req, res, next) => {

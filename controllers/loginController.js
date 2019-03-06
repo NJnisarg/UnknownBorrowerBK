@@ -1,4 +1,4 @@
-const { response }= require('../helpers/response');
+const { response }= require('../helpers/response'); //Used for de-structuring. It allows to access the key:value pair from the object response. As key=>response value=>function
 const User = require('../models/user.js');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -55,7 +55,7 @@ const registerUser = async (req,res) => {
     });
 };
 
-const AuthorizationMiddleware = async (req,res,next) => {
+    const AuthorizationMiddleware = async (req,res,next) => {
     let token = req.header('Authorization');
 
     if(!token)

@@ -18,7 +18,7 @@ module.exports = {
             let OTP = Math.random().toString(36).substring(7);
 
 
-            if(ses("NJnisarg@gmail.com",OTP))
+            if(ses("siddhartha.15.temp@gmail.com",OTP))
             {
                 FP.create({userId,OTP}).then(() => {
                     response(res,null,"OTP Sent",null,200);

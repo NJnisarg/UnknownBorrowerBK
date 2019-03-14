@@ -55,7 +55,7 @@ const registerUser = async (req,res) => {
     });
 };
 
-    const AuthorizationMiddleware = async (req,res,next) => {
+const AuthorizationMiddleware = async (req,res,next) => {
     let token = req.header('Authorization');
 
     if(!token)
@@ -64,6 +64,7 @@ const registerUser = async (req,res) => {
     }
 
     token = token.split(' ')[1];
+    console.log(token);
 
     jwt.verify(token, authConfig.jwtSecret, async (err, decoded) => {
         if(err){

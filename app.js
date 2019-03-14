@@ -9,6 +9,7 @@ let usersRouter = require('./routes/users');
 let searchRouter = require('./routes/search');
 let profileRouter = require('./routes/profile');
 let fpRouter = require('./routes/forgotPassword');
+let outgoingRouter=require('./routes/outgoing');
 
 let app = express();
 
@@ -27,6 +28,7 @@ app.use('/users', usersRouter);
 app.use('/search', searchRouter);
 app.use('/profile', profileRouter);
 app.use('/forgotPassword',fpRouter);
+app.use('/outgoing',outgoingRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

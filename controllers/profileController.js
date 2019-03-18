@@ -9,6 +9,7 @@ module.exports = {
 
         let userId = req.userId;
 
+
         try {
             let userProfile = await profile.findOne({
                 where:{

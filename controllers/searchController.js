@@ -39,6 +39,7 @@ module.exports = {
             type: 'user',
             id : userObject.userId,
             body: {
+                userId: userObject.userId,
                 city: userObject.city,
                 contactNum: userObject.contactNum,
                 name: userObject.name,

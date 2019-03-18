@@ -71,16 +71,22 @@ module.exports = {
         let OTP = req.body.OTP;
         let newPassword = req.body.newPassword;
 
-        console.log("LOG:" + req.body.OTP);
         let hashedPassword = bcrypt.hashSync(newPassword, 8);
 
         try{
 
             User.update({ 'password' : hashedPassword}, { where : { userId }}).then(count => {
-                console.log('Rows updated ' + count)
+                FP.destroy({
+                    where:{userId}
+                }).then(count=> {
+                    console.log('Rows updated ' + count);
+                    response(res, null, 'Password updated successfully', null, 202);
+                }).catch(err => {
+                    console.log("Could not delete the OTPs. Please do something")
+                })
+            }).catch(err => {
+                response(res,err,"Could not update the profile",null,500)
             });
-
-            response(res, null, 'Password updated successfully', null, 202);
 
         }
         catch(e){

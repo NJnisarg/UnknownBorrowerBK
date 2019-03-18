@@ -71,7 +71,7 @@ module.exports = {
         let OTP = req.body.OTP;
         let newPassword = req.body.newPassword;
 
-        console.log(newPassword);
+        console.log("LOG:" + req.body);
         let hashedPassword = bcrypt.hashSync(newPassword, 8);
 
         try{

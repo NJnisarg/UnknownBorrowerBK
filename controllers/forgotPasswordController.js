@@ -71,16 +71,14 @@ module.exports = {
         let OTP = req.body.OTP;
         let newPassword = req.body.newPassword;
 
+        console.log(newPassword);
         let hashedPassword = bcrypt.hashSync(newPassword, 8);
 
         try{
-            let fp = await FP.findOne({
-                where: {userId}
-            });
 
-            User.update({ 'password' : hashedPassword}, { where : { userId: fp.userId}}).then(count => {
+            User.update({ 'password' : hashedPassword}, { where : { userId }}).then(count => {
                 console.log('Rows updated ' + count)
-            })
+            });
 
             response(res, null, 'Password updated successfully', null, 202);
 

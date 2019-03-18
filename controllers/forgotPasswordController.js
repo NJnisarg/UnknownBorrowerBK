@@ -43,7 +43,7 @@ module.exports = {
         if(OTP!=null || OTP !== "")
         {
             try{
-                fp = await FP.findOne({
+                let fp = await FP.findOne({
                     where: {OTP}
                 });
 
@@ -52,9 +52,9 @@ module.exports = {
                         where:{userId:fp.userId}
                     });
 
-                    res = { emailId:user.emailId, OTP:fp.OTP, userId:user.userId};
+                    let resp = { emailId:user.emailId, OTP:fp.OTP, userId:user.userId};
 
-                    response(res,null,res,null,200);
+                    response(res,null,resp,null,200);
                 }
                 catch (e) {
                     response(res,e,"Corresponding user not found",null,404);

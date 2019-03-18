@@ -4,6 +4,7 @@ const sequelize = require('../config/dbConfig');
 const Profile = sequelize.define('profile',{
     userId : { type: Sequelize.INTEGER, primaryKey: true },
     name : { type: Sequelize.STRING(45), allowNull: false },
+    imageUrl : {type: Sequelize.STRING(200), allowNull: true},
     city : { type: Sequelize.STRING(45), allowNull: false },
     state : { type: Sequelize.STRING(45), allowNull: false },
     org : { type: Sequelize.STRING(45), allowNull: false },

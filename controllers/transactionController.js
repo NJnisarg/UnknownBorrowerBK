@@ -1,8 +1,5 @@
 const transactionController = require('../models/transaction');
 const { response } = require('../helpers/response');
-var uniqid = require('uniqid');
-let id=uniqid();
-//console.log(id);
 
 module.exports = {
     'sendRequest' : async (req,res,next) => {
@@ -21,7 +18,6 @@ module.exports = {
         let borrowerId = req.userId;
 
         transactionController.create({
-            transactionId: id,
             borrowerId: borrowerId,
             borrowerName: borrowerName,
             lenderId: lenderId,

@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const sequelize = require('../config/dbConfig');
 
 const Transaction = sequelize.define('transaction', {
-    transactionId : { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
+    transactionId : { type: Sequelize.STRING, primaryKey: true, autoIncrement: true },
     borrowerId : { type: Sequelize.INTEGER, allowNull: false },
     borrowerName : { type: Sequelize.STRING(45), allowNull: false },
     ratings : { type: Sequelize.DOUBLE },

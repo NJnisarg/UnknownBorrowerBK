@@ -1,5 +1,6 @@
 let esClient = require('../config/elasticsearchConfig');
 let { response } = require('../helpers/response');
+let profile = require('../models/profile');
 
 module.exports = {
     'get': async (req,res) => {
@@ -33,13 +34,37 @@ module.exports = {
         response(res,null,finalResponse,"Successful Search",200)
     },
 
+    'viewProfile': async (req, res, next) => {
+
+        //let userId = parseInt(req.query.id,10);
+        let userId = req.query.id;
+        try {
+            let userProfile = await profile.findOne({
+                where: {
+                    userId: userId
+                }
+            });
+            console.log(userProfile);
+
+            if (userProfile === null) {
+                response(res, null, 'No such user exists', null, 404);
+            }
+
+            response(res, null, userProfile, null, 200);
+
+        } catch (err) {
+            console.log(err);
+            //response(res, null, 'No such user exists1', null, 404);
+        }
+    },
+
     'insert': async (userObject) => {
         let esRes = await esClient.create({
             index: 'user_index',
             type: 'user',
             id : userObject.userId,
             body: {
-                userId: userObject.userId,
+                userId : userObject.userId,
                 city: userObject.city,
                 contactNum: userObject.contactNum,
                 name: userObject.name,

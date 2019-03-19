@@ -19,4 +19,4 @@ incomingRouter.post('/decline',authmiddleware,incomingController.decline);
 //incomingRouter.post('/pay',incomingController.pay);
 
 
-module.exports= outgoingRouter;
+module.exports= incomingRouter;

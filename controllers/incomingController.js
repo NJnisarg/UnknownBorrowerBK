@@ -114,7 +114,7 @@ module.exports= {
     // pay api below
     // pay the amount from lender to borrower
 
-   /* 'pay': async (req, res, next) => {
+   /*'pay': async (req, res, next) => {
         let lenderId = req.userId;
         let borrowerId = req.borrowerId;
         let transactionId = req.transactionId;
@@ -124,7 +124,7 @@ module.exports= {
                     lenderId: lenderId,
                     borrowerId:borrowerId
                 }
-            });
+            })
 
             profile.update({'balance': profile.get('balance') - req.body.amount}, {where: {userId: lenderId}}).then(count => {
                 console.log('Rows updated' + count)
@@ -144,5 +144,6 @@ module.exports= {
                 response(res,e,"Profile Not found",null,404);
             }
         }
+
     }*/
 };

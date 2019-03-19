@@ -9,9 +9,6 @@ module.exports = {
             lenderId,
             lenderName,
             amount,
-            requestedDate,
-            acceptedDate,
-            completionDate,
             status
         } = req.body;
 
@@ -23,9 +20,6 @@ module.exports = {
             lenderId: lenderId,
             lenderName: lenderName,
             amount: amount,
-            requestedDate: requestedDate,
-            acceptedDate: acceptedDate,
-            completionDate: completionDate,
             status: status
         }).then(ans=>{
             response(res, null, ans, null, 201);

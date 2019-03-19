@@ -16,7 +16,7 @@ incomingRouter.get('/getProfile',incomingController.getProfile);
 incomingRouter.post('/decline',authmiddleware,incomingController.decline);
 
 //pay api
-incomingRouter.post('/pay',incomingController.pay);
+incomingRouter.post('/pay', authmiddleware,incomingController.pay);
 
 
 module.exports= incomingRouter;

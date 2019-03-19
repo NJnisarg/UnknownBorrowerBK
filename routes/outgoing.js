@@ -13,4 +13,6 @@ outgoingRouter.get('/outReqConfirmed',authmiddleware,outgoingController.getreqCo
 // outgoingRouter.delete('/drop',)
 outgoingRouter.post('/dropRequest',authmiddleware,outgoingController.dropRequest);
 
+outgoingRouter.post('/pay_back',authmiddleware, outgoingController.pay_back);
+
 module.exports= outgoingRouter;

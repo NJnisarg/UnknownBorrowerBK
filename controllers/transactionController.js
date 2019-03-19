@@ -31,29 +31,21 @@ module.exports = {
 
     'getalltransactions' : async(req,res) => {
 
-        let userId = req.query.userId;
+        let userId = req.userId;
 
 
         try{
 
             let user_transactions = await transactionController.findAll({
-                // $or:[{where:
-                //         {borrowerId:userId},
-                //         {lenderId:userId}}]
-
-
-            $or: [{ where : {borrowerId: userId}}, {where: {lenderId: userId}}]
-
-         // where: { $or: [{borrowerId: userId},{lenderId: userId}]}
-         //         where: {
-         //             $or: [{borrowerId: userId}, {lenderId: userId}]
-         //         },
-         //       where: {
-         //             borrowerId : userId
-         //          },
+                where: {lenderId: userId}
              });
-            console.log(user_transactions);
-            response(res,null,user_transactions,null,200);
+
+            let user_txns2 = await transactionController.findAll({
+                where: {borrowerId: userId}
+            });
+
+
+            response(res,null,user_transactions.concat(user_txns2),null,200);
         }
         catch (err) {
             console.log(err);

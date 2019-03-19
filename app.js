@@ -11,6 +11,7 @@ let profileRouter = require('./routes/profile');
 let fpRouter = require('./routes/forgotPassword');
 let outgoingRouter=require('./routes/outgoing');
 let transactionRouter=require('./routes/transaction');
+let incomingRouter=require('./routes/incoming');
 
 let app = express();
 
@@ -31,6 +32,7 @@ app.use('/profile', profileRouter);
 app.use('/forgotPassword',fpRouter);
 app.use('/outgoing',outgoingRouter);
 app.use('/transaction',transactionRouter);
+app.use('./incoming',incomingRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

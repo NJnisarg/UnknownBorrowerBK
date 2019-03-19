@@ -84,8 +84,6 @@ module.exports= {
         }
 
     },
-    // pay api below
-    // pay the amounnt from lender to borrower
 
     // view profile api below
 
@@ -112,5 +110,39 @@ module.exports= {
             console.log(err);
             response(res, null, 'No such user exists', null, 404);
         }
-    }
+    },
+    // pay api below
+    // pay the amount from lender to borrower
+
+   /* 'pay': async (req, res, next) => {
+        let lenderId = req.userId;
+        let borrowerId = req.borrowerId;
+        let transactionId = req.transactionId;
+        try{
+            let pay = await incoming.findOne({
+                where: {
+                    lenderId: lenderId,
+                    borrowerId:borrowerId
+                }
+            });
+
+            profile.update({'balance': profile.get('balance') - req.body.amount}, {where: {userId: lenderId}}).then(count => {
+                console.log('Rows updated' + count)
+            }).then(
+                profile.update({'balance': profile.get('balance') + req.body.amount}, {where: {userId: borrowerId}}).then(count => {
+                    console.log('Rows updated' + count)
+                })).then(
+                incoming.update({'status':2},{where:{transactionId: transactionId}}).then(count => {
+                        console.log('Rows updated' + count)
+                }));
+
+            response(res, null, "Money added successfully!",null, 202);
+        }
+
+        catch(err){
+                    console.log(err);
+                response(res,e,"Profile Not found",null,404);
+            }
+        }
+    }*/
 };

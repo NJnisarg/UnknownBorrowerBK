@@ -66,7 +66,6 @@ module.exports= {
             incoming.destroy({
                 where: {
                     transactionId:transID,
-                    lenderID: userID
                 }
             }).then((rowDeleted)=>{
                 if( rowDeleted === 1 )
@@ -115,33 +114,65 @@ module.exports= {
     // pay the amount from lender to borrower
 
    'pay': async (req, res, next) => {
-        let lenderId = req.userId;
-        let borrowerId = req.borrowerId;
-        let transactionId = req.transactionId;
+        let txnId = req.body.transactionId;
+        let userId = req.userId;
+
         try{
-            let pay = await incoming.findOne({
-                where: {
-                    lenderId: lenderId,
-                    borrowerId:borrowerId
+            let txn = await incoming.findOne({
+                where:{
+                    transactionId: txnId
                 }
-            })
+            });
 
-            profile.update({'balance': profile.get('balance') - req.body.amount}, {where: {userId: lenderId}}).then(count => {
-                console.log('Rows updated' + count)
-            }).then(
-                profile.update({'balance': profile.get('balance') + req.body.amount}, {where: {userId: borrowerId}}).then(count => {
-                    console.log('Rows updated' + count)
-                })).then(
-                incoming.update({'status':2},{where:{transactionId: transactionId}}).then(count => {
-                        console.log('Rows updated' + count)
-                }));
+            let borrowerId = txn.get('borrowerId');
+            let lenderId = txn.get('lenderId');
+            let amt = txn.get('amount');
 
-            response(res, null, "payment done successfully!",null, 202);
-        }
+            let borrower = await profile.findOne({
+                where:{
+                    userId:borrowerId
+                }
+            });
 
-        catch(err){
-                    console.log(err);
-                response(res,e,"Profile Not found",null,404);
+            let lender = await profile.findOne({
+                where:{
+                    userId:lenderId
+                }
+            });
+
+            if(lender.get('balance') < amt)
+            {
+                response(res,null,"insufficient funds",null,200);
             }
+            else
+            {
+                profile.update({ balance : lender.get('balance') - amt },{ where : { userId: lenderId }}).then(count => {
+                    console.log('Rows updated' + count)
+                }).catch(e => {
+                    response(res,e,"lender balance not changed",null,500);
+                });
+
+                profile.update({ balance : borrower.get('balance') + amt },{ where : { userId: borrowerId }}).then(count => {
+                    console.log('Rows updated' + count)
+                }).catch(e => {
+                    response(res,e,"Borrower balance not changed",null,500);
+                });
+
+                incoming.update({
+                    status: 2,
+                    acceptedDate: new Date()
+                }, { where: { transactionId: txnId}}).then(count => {
+                    console.log('Rows updated' + count);
+                    response(res, null, "payment successful",null,200);
+                }).catch(e => {
+                    response(res,e,"Status not changed",null,500);
+                })
+            }
+
+        }catch(e)
+        {
+            response(res,e,"No such transaction exists",null, 404)
         }
+
+   }
 };

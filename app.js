@@ -32,7 +32,7 @@ app.use('/profile', profileRouter);
 app.use('/forgotPassword',fpRouter);
 app.use('/outgoing',outgoingRouter);
 app.use('/transaction',transactionRouter);
-app.use('./incoming',incomingRouter);
+app.use('/incoming',incomingRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

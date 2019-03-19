@@ -3,9 +3,12 @@ const transactionRouter = express.Router();
 const transactionController = require('../controllers/transactionController');
 const authMiddleware = require('../controllers/loginController').AuthorizationMiddleware;
 
-
 /* Send Request to lender */
-transactionRouter.post('/sendRequest', authMiddleware, transactionController.sendRequest);
+transactionRouter.post('/sendRequest',transactionController.sendRequest);
+
+
+//Get all transactions
+transactionRouter.get('/getalltransactions', authMiddleware, transactionController.getalltransactions);
 
 //check
 transactionRouter.get('/', function(req, res, next) {

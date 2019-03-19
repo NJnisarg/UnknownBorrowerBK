@@ -84,7 +84,7 @@ module.exports= {
             response(res,null,'Something went wrong',null,404);
         }
 
-    }
+    },
     // pay api below
     // pay the amounnt from borrower to lender once the requests confirmed
 

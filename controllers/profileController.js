@@ -3,6 +3,21 @@ const User = require('../models/user');
 const { response } = require('../helpers/response');
 const searchHandler = require('./searchController');
 const bcrypt = require('bcryptjs');
+const multer = require('multer');
+const multerS3 = require('multer-s3');
+const s2 = require('../config/s3Config');
+
+const upload = multer({
+    storage: multerS3({
+        s3: s2,
+        bucket: 'unknownborrowersimages',
+        acl: 'public-read',
+        key: (req,file, cb) => { cb(null, (req.userId).toString()) }
+    })
+});
+
+const singleUpload = upload.single('image');
+
 
 module.exports = {
     'getProfile': async (req, res, next) =>  {
@@ -138,5 +153,16 @@ module.exports = {
                 response(res, null, err, null, 500);
         });
 
+    },
+
+    'uploadImage': async (req,res) => {
+        singleUpload(req,res, async (err, some) => {
+            if(err)
+            {
+                response(res,err,err,null, 500)
+            }
+            response(res,null,{'imageUrl': req.file.location },null,200)
+
+        })
     }
 };

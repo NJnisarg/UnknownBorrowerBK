@@ -9,8 +9,8 @@ profileRouter.get('/getProfile', authMiddleware, profileController.getProfile);
 /* PUT request for adding wallet money*/
 profileRouter.put('/addMoney', authMiddleware, profileController.addMoney);
 
-// /* PUT request for uploading user profile image */
-// profileRouter.put('/updateImage', authMiddleware, profileController.updateImage);
+/* PUT request for uploading user profile image */
+profileRouter.post('/uploadImage', authMiddleware, profileController.uploadImage);
 
 /* PUT request to update the Profile */
 profileRouter.put('/editProfile/', authMiddleware, profileController.updateProfile);

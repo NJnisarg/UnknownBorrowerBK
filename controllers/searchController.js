@@ -165,6 +165,7 @@ module.exports = {
                 }
             });
 
+            esRes = esRes['hits']['hits'];
             let finalResponse = [];
 
             esRes.forEach((obj) => {

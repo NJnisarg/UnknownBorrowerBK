@@ -64,7 +64,7 @@ module.exports = {
 
     'insert': async (userObject) => {
 
-        fetch('https://us1.locationiq.com/v1/search.php?key=3ed6867bb4fcb6&q=Vadodara%20India&format=json',async (err,meta,body) => {
+        fetch('https://us1.locationiq.com/v1/search.php?key=3ed6867bb4fcb6&q='+userObject.city+'%20India&format=json',async (err,meta,body) => {
 
             let lat = JSON.parse(body.toString())[0]['lat'];
             let lon = JSON.parse(body.toString())[0]['lon'];

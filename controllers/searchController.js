@@ -165,7 +165,13 @@ module.exports = {
                 }
             });
 
-            response(res,null,esRes['hits']['hits'],null,200)
+            let finalResponse = [];
+
+            esRes.forEach((obj) => {
+                finalResponse.push(obj['_source'])
+            });
+
+            response(res,null,finalResponse,"Successful Search",200)
         });
     }
 };

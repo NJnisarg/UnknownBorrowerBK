@@ -153,10 +153,10 @@ module.exports = {
                             },
                             'filter': {
                                 'geo_distance' : {
-                                    'distance' : '1000km',
-                                    'pin.location' : {
-                                        'lat' : dt['lat'],
-                                        'lon' : dt['lon']
+                                    'distance' : '350km',
+                                    'location' : {
+                                        'lat' : dt['location']['lat'],
+                                        'lon' : dt['location']['lon']
                                     }
                                 }
                             }

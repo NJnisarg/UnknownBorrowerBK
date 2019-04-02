@@ -1,6 +1,10 @@
 let esClient = require('../config/elasticsearchConfig');
 let { response } = require('../helpers/response');
 let profile = require('../models/profile');
+let fetch = require('fetch').fetchUrl;
+let jwt = require('jsonwebtoken');
+let authConfig = require('../config/authConfig');
+
 
 module.exports = {
     'get': async (req,res) => {
@@ -59,25 +63,39 @@ module.exports = {
     },
 
     'insert': async (userObject) => {
-        let esRes = await esClient.create({
-            index: 'user_index',
-            type: 'user',
-            id : userObject.userId,
-            body: {
-                userId : userObject.userId,
-                city: userObject.city,
-                contactNum: userObject.contactNum,
-                name: userObject.name,
-                organization: userObject.org
+
+        fetch('https://us1.locationiq.com/v1/search.php?key=3ed6867bb4fcb6&q=Vadodara%20India&format=json',async (err,meta,body) => {
+
+            let lat = JSON.parse(body.toString())[0]['lat'];
+            let lon = JSON.parse(body.toString())[0]['lon'];
+
+            console.log('lat: ' + lat + ' and lon: ' + lon);
+
+
+            let esRes = await esClient.create({
+                index: 'user_index',
+                type: 'user',
+                id : userObject.userId,
+                body: {
+                    userId : userObject.userId,
+                    city: userObject.city,
+                    contactNum: userObject.contactNum,
+                    name: userObject.name,
+                    organization: userObject.org,
+                    location: {
+                        "lat":lat,
+                        "lon":lon
+                    }
+                }
+            });
+
+            try{
+                console.log(esRes);
+            }
+            catch(err){
+                console.log(err);
             }
         });
-
-        try{
-            console.log(esRes);
-        }
-        catch(err){
-            console.log(err);
-        }
     },
 
     'update': async (userObject) => {
@@ -96,5 +114,58 @@ module.exports = {
         catch(err){
             console.log(err);
         }
+    },
+
+    'geoSearch': async (req,res) => {
+
+        let token = req.query.token;
+
+        jwt.verify(token, authConfig.jwtSecret, async (err, decoded) => {
+            if (err) {
+                response(res, null, {'error': 'Token not verified'}, null, 401);
+            }
+
+            let userId = decoded.id;
+
+            let userResponse = await esClient.search({
+                'index': 'user_index',
+                'type': 'user',
+                'body': {
+                    'query': {
+                        'term': {
+                            'userId': userId
+                        }
+                    }
+                }
+            });
+
+            let dt = userResponse['hits']['hits'][0]['_source'];
+            console.log(dt);
+
+            let esRes = await esClient.search({
+                'index':'user_index',
+                'type':'user',
+                'body':{
+                    'query':{
+                        'bool':{
+                            'must': {
+                                'match_all' : {}
+                            },
+                            'filter': {
+                                'geo_distance' : {
+                                    'distance' : '1000km',
+                                    'pin.location' : {
+                                        'lat' : dt['lat'],
+                                        'lon' : dt['lon']
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            response(res,null,esRes['hits']['hits'],null,200)
+        });
     }
 };

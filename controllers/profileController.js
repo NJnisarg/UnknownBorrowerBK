@@ -161,7 +161,7 @@ module.exports = {
             {
                 response(res,err,err,null, 500)
             }
-            response(res,null,{'imageUrl': req.file.location },null,200)
+            response(res,null,{'imageUrl': req.file },null,200)
 
         })
     }
